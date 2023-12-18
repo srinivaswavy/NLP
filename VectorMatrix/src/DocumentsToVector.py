@@ -24,7 +24,7 @@ vectors = []
 for sentence in data:
     vectors.append(transformTextToVector(sentence))
 
-array(vectors)
+matrix(vectors)
 
 
 
