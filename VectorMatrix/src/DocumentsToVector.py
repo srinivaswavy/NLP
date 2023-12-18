@@ -2,9 +2,9 @@ from numpy import *
 
 data = array(["Hi! How are you?", "I am Srini", "After that it's all blah blah blah"])
 
-flattenedWordData = list(map(lambda item: item.split(" "), data))
+wordData = list(map(lambda item: item.split(" "), data))
 
-uniqueWords = unique([item for row in flattenedWordData for item in row])
+uniqueWords = unique([item for row in wordData for item in row])
 
 vocabulary = {}
 i=0
