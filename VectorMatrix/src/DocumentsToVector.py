@@ -12,8 +12,6 @@ for item in uniqueWords:
     vocabulary[item] = i
     i+=1
 
-print(vocabulary)
-
 def transformTextToVector( str:str):
     vector = zeros(len(vocabulary),int)
     for word in str.split(" "):
@@ -26,7 +24,7 @@ vectors = []
 for sentence in data:
     vectors.append(transformTextToVector(sentence))
 
-print(array(vectors))
+array(vectors)
 
 
 
