@@ -21,8 +21,8 @@ def get_wordnet_pos(treebank_tag):
     else:
         return wordnet.NOUN
 def vectorize(s:str):
-    words =  s.split()
-    words_and_tags  = nltk.pos_tag(words)
+    words = s.lower().split()
+    words_and_tags = nltk.pos_tag(words)
     return [lemmatizer.lemmatize(word,pos=get_wordnet_pos(tag)) for word,tag in words_and_tags]
 
 
@@ -31,6 +31,6 @@ with open('data','r') as datafile:
         lambda s:" ".join(vectorize(s)),datafile.readlines()
     )
     X = vectorizer.fit_transform(list(data))
-vocabolary = vectorizer.get_feature_names_out()
+vocabulary = vectorizer.get_feature_names_out()
 print(X.toarray())
-print(vocabolary)
+print(vocabulary)
