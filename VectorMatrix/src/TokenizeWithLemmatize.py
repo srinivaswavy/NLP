@@ -9,6 +9,7 @@ nltk.download("averaged_perceptron_tagger")
 lemmatizer = WordNetLemmatizer()
 vectorizer = CountVectorizer()
 
+
 def get_wordnet_pos(treebank_tag):
     if treebank_tag.startswith('J'):
         return wordnet.ADJ
@@ -20,15 +21,17 @@ def get_wordnet_pos(treebank_tag):
         return wordnet.ADV
     else:
         return wordnet.NOUN
-def vectorize(s:str):
+
+
+def vectorize(s: str):
     words = s.lower().split()
     words_and_tags = nltk.pos_tag(words)
-    return [lemmatizer.lemmatize(word,pos=get_wordnet_pos(tag)) for word,tag in words_and_tags]
+    return [lemmatizer.lemmatize(word, pos=get_wordnet_pos(tag)) for word, tag in words_and_tags]
 
 
-with open('data','r') as datafile:
+with open('data', 'r') as datafile:
     data = map(
-        lambda s:" ".join(vectorize(s)),datafile.readlines()
+        lambda s: " ".join(vectorize(s)), datafile.readlines()
     )
     X = vectorizer.fit_transform(list(data))
 vocabulary = vectorizer.get_feature_names_out()
