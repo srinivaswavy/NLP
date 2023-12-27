@@ -35,5 +35,8 @@ with open('data', 'r') as datafile:
     )
     X = vectorizer.fit_transform(list(data))
 vocabulary = vectorizer.get_feature_names_out()
+
+print(X)
+
 print(X.toarray())
 print(vocabulary)
