@@ -14,4 +14,8 @@ nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
 nltk.download("omw-1.4")
 
+df = pd.read_csv('bbc_text_cls.csv')
+
+print(df.head())
+
 
