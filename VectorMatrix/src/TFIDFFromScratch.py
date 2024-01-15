@@ -40,11 +40,11 @@ for i, doc in enumerate(tokenized_docs):
     for j in doc:
         tf[i][j] += 1
 
-print(tf)
+print('tf shape', tf.shape)
 
 idf = np.log(N / np.sum(tf > 0, axis=0))
 
-print(idf)
+print('idf shape', idf.shape)
 
 tf_idf = tf * idf
 
