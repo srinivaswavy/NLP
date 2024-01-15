@@ -17,6 +17,7 @@ x = df.iloc[0]
 
 genresJson = json.loads(x["genres"])
 
+
 # print(genresJson)
 
 # print(' '.join(''.join(gj["name"].split()) for gj in genresJson))
@@ -41,19 +42,19 @@ X = tfIdf.fit_transform(df["string"])
 
 # print(len(X.toarray()[0]))
 
-movieToIndex = pd.Series(df.index,index=df["title"])
+movieToIndex = pd.Series(df.index, index=df["title"])
 index = movieToIndex["Scream 3"]
 query = X[index]
 # print(query)
 
-scores = cosine_similarity(query,X)
+scores = cosine_similarity(query, X)
 scores = scores.flatten()
 
 plt.plot(scores);
 
 plt.show()
 
-plt.plot( scores[(-scores).argsort()])
+plt.plot(scores[(-scores).argsort()])
 plt.show()
 
 recommendedIndices = (-scores).argsort()[1:6]
@@ -61,5 +62,3 @@ recommendedIndices = (-scores).argsort()[1:6]
 print(recommendedIndices)
 
 print(df["title"].iloc[recommendedIndices])
-
-

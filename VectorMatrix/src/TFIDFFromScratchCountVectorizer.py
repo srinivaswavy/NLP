@@ -3,14 +3,13 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 
-
 df = pd.read_csv('bbc_text_cls.csv')
 count_vectorizer = CountVectorizer()
 
 tf = count_vectorizer.fit_transform(df["text"])
 
-#convert sparse matrix to dense matrix
-#tf = tf.toarray()
+# convert sparse matrix to dense matrix
+# tf = tf.toarray()
 
 # Get the list of words
 words = count_vectorizer.get_feature_names_out()
@@ -36,7 +35,6 @@ tf_idf = tf.multiply(idf)
 random_i = np.random.choice(N)
 
 print("tf_idf_shape", tf_idf.shape)
-
 
 # convert coo_matrix to csr_matrix
 tf_idf = tf_idf.tocsr()
