@@ -41,3 +41,13 @@ Pi = np.log((Pi + 1) / (Pi.sum() + M))
 
 print('A', A)
 print('Pi', Pi)
+
+i = word_to_index['The']
+
+print('the', Pi[i])
+
+i = word_to_index['India']
+print('India', Pi[i])
+
+i = word_to_index['US']
+print('US', Pi[i])
