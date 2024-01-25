@@ -18,6 +18,7 @@ def get_index_from_word(word_to_index, word):
     else:
         return word_to_index["unknown999"]
 
+
 def TokenizePoems(filePath):
     word_to_index = {}
     index = 0
@@ -25,7 +26,7 @@ def TokenizePoems(filePath):
     with open(filePath) as f:
         lines = f.readlines()
         print('total lines', len(lines))
-        XTrain, XTest = train_test_split(lines, random_state=123)
+        XTrain, XTest = train_test_split(lines, random_state=123, test_size=0.15)
         print('train set size', len(XTrain))
         print('test set size', len(XTest))
         for line in XTrain:
@@ -101,3 +102,21 @@ print(MarKovProbability(
 print(MarKovProbability(
     'There shrines, and palaces, and towers'.lower().translate(str.maketrans('', '', string.punctuation)), edgar_A,
     edgar_Pi, edgar_word_to_index))
+
+total = 0
+errors = 0
+for x in Xtrain:
+    x = x.lower().translate(str.maketrans('', '', string.punctuation))
+    print(x)
+    if x.strip() != "":
+        total += 1
+        robertP = MarKovProbability(
+            x, robert_A,
+            robert_Pi, robert_word_to_index)
+        edgarP = MarKovProbability(
+            x, edgar_A,
+            edgar_Pi, edgar_word_to_index)
+        if robertP < edgarP:
+            errors += 1
+
+print(total, errors)
