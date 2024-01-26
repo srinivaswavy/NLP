@@ -45,9 +45,9 @@ def TokenizePoems(filePath):
     return word_to_index, matrix, XTrain, XTest
 
 
-def get_markov_probabilities(vector_matrix, vocabulary_size):
-    A = np.ones((vocabulary_size, vocabulary_size))
-    Pi = np.ones(vocabulary_size)
+def get_markov_probabilities(vector_matrix, vocabulary_size, epsilon=0.1):
+    A = np.ones((vocabulary_size, vocabulary_size)) * epsilon
+    Pi = np.ones(vocabulary_size) * epsilon
     for i in range(len(vector_matrix)):
         Pi[vector_matrix[i][0]] += 1
         for j in range(len(vector_matrix[i]) - 1):
@@ -76,8 +76,8 @@ print(" ".join(index_to_word[robert_matrix[0]]))
 
 print("matrix", robert_matrix)
 
-robert_A, robert_Pi = get_markov_probabilities(robert_matrix, robert_M)
-edgar_A, edgar_Pi = get_markov_probabilities(edgar_matrix, edgar_M)
+robert_A, robert_Pi = get_markov_probabilities(robert_matrix, robert_M, epsilon=0.5)
+edgar_A, edgar_Pi = get_markov_probabilities(edgar_matrix, edgar_M, epsilon=0.5)
 
 print("Pi", robert_Pi)
 
@@ -105,7 +105,7 @@ print(MarKovProbability(
 
 total = 0
 errors = 0
-for x in Xtrain:
+for x in edgar_Xtrain:
     x = x.lower().translate(str.maketrans('', '', string.punctuation))
     print(x)
     if x.strip() != "":
