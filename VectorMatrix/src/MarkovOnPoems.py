@@ -4,12 +4,12 @@ import numpy as np
 import string
 
 
-def MarKovProbability(Poem, A, Pi, word_to_index):
+def MarKovProbability(Poem, A, Pi, word_to_index, prior):
     tokens = word_tokenize(Poem)
     logP = Pi[get_index_from_word(word_to_index, tokens[0])]
     for i in range(len(tokens) - 1):
         logP += A[get_index_from_word(word_to_index, tokens[i]), get_index_from_word(word_to_index, tokens[i + 1])]
-    return logP
+    return logP + np.log(prior)
 
 
 def get_index_from_word(word_to_index, word):
@@ -26,7 +26,7 @@ def TokenizePoems(filePath):
     with open(filePath) as f:
         lines = f.readlines()
         print('total lines', len(lines))
-        XTrain, XTest = train_test_split(lines, random_state=123, test_size=0.15)
+        XTrain, XTest = train_test_split(lines, random_state=6, test_size=0.15)
         print('train set size', len(XTrain))
         print('test set size', len(XTest))
         for line in XTrain:
@@ -63,6 +63,9 @@ robert_word_to_index, robert_matrix, Xtrain, XTest = TokenizePoems('/Users/csrin
 edgar_word_to_index, edgar_matrix, edgar_Xtrain, edgar_XTest = TokenizePoems(
     '/Users/csriniv6/Downloads/edgar_allan_poe.txt')
 
+robert_prior = len(robert_matrix) / (len(robert_matrix) + len(edgar_matrix))
+edgar_prior = len(edgar_matrix) / (len(robert_matrix) + len(edgar_matrix))
+
 print('XTrain', robert_matrix)
 print('XTrain size', len(robert_matrix))
 
@@ -76,32 +79,32 @@ print(" ".join(index_to_word[robert_matrix[0]]))
 
 print("matrix", robert_matrix)
 
-robert_A, robert_Pi = get_markov_probabilities(robert_matrix, robert_M, epsilon=0.5)
-edgar_A, edgar_Pi = get_markov_probabilities(edgar_matrix, edgar_M, epsilon=0.5)
+robert_A, robert_Pi = get_markov_probabilities(robert_matrix, robert_M, epsilon=0.2)
+edgar_A, edgar_Pi = get_markov_probabilities(edgar_matrix, edgar_M, epsilon=0.1)
 
 print("Pi", robert_Pi)
 
 print("A", robert_A)
 
 print(MarKovProbability('I blah drew jug to say'.lower().translate(str.maketrans('', '', string.punctuation)), robert_A,
-                        robert_Pi, robert_word_to_index))
+                        robert_Pi, robert_word_to_index, robert_prior))
 poem = """as just as fair"""
 processed_poem = poem.lower().translate(str.maketrans('', '', string.punctuation))
-print(MarKovProbability(processed_poem, robert_A, robert_Pi, robert_word_to_index))
+print(MarKovProbability(processed_poem, robert_A, robert_Pi, robert_word_to_index, robert_prior))
 
 print(MarKovProbability(
     'Two roads diverged in a yellow wood,'.lower().translate(str.maketrans('', '', string.punctuation)), robert_A,
-    robert_Pi, robert_word_to_index))
+    robert_Pi, robert_word_to_index, robert_prior))
 print(MarKovProbability(
     'Two roads diverged in a yellow wood,'.lower().translate(str.maketrans('', '', string.punctuation)), edgar_A,
-    edgar_Pi, edgar_word_to_index))
+    edgar_Pi, edgar_word_to_index, edgar_prior))
 
 print(MarKovProbability(
     'There shrines, and palaces, and towers'.lower().translate(str.maketrans('', '', string.punctuation)), robert_A,
-    robert_Pi, robert_word_to_index))
+    robert_Pi, robert_word_to_index, robert_prior))
 print(MarKovProbability(
     'There shrines, and palaces, and towers'.lower().translate(str.maketrans('', '', string.punctuation)), edgar_A,
-    edgar_Pi, edgar_word_to_index))
+    edgar_Pi, edgar_word_to_index, edgar_prior))
 
 total = 0
 errors = 0
@@ -112,10 +115,10 @@ for x in edgar_Xtrain:
         total += 1
         robertP = MarKovProbability(
             x, robert_A,
-            robert_Pi, robert_word_to_index)
+            robert_Pi, robert_word_to_index, robert_prior)
         edgarP = MarKovProbability(
             x, edgar_A,
-            edgar_Pi, edgar_word_to_index)
+            edgar_Pi, edgar_word_to_index, edgar_prior)
         if robertP < edgarP:
             errors += 1
 
