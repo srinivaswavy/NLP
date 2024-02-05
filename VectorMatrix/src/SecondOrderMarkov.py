@@ -17,7 +17,7 @@ def get_markov_probabilities(data):
         if line:
             # remove punctuation
             line = line.translate(str.maketrans('', '', string.punctuation))
-            tokens = word_tokenize(line)
+            tokens = line.split()
             if tokens[0] in pi:
                 pi[tokens[0]] += 1
             else:
@@ -47,6 +47,17 @@ def get_markov_probabilities(data):
                     a2[tokens[i]] = {}
                     a2[tokens[i]][tokens[i + 1]] = {}
                     a2[tokens[i]][tokens[i + 1]][tokens[i + 2]] = 1
+
+    for word in pi:
+        pi[word] = pi[word] / sum(pi.values())
+
+    for word in a:
+        for word2 in a[word]:
+            a[word][word2] = a[word][word2] / sum(a[word].values())
+    for word in a2:
+        for word2 in a2[word]:
+            for word3 in a2[word][word2]:
+                a2[word][word2][word3] = a2[word][word2][word3] / sum(a2[word][word2].values())
 
     return pi, a, a2
 
