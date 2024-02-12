@@ -1,0 +1,38 @@
+{
+  "type": "record",
+  "name": "DataRecord2",
+  "namespace": "com.record.data",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "address",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "enum",
+        "name": "typeEnum2",
+        "symbols": [
+          "O"
+        ]
+      }
+    }
+  ],
+  "doc": {
+    "description": "This is a record for the  data",
+    "tags": [
+      {
+        "name": "author",
+        "value": "Srini"
+      },
+      {
+        "name": "version",
+        "value": "2.0"
+      }
+    ]
+  }
+}
