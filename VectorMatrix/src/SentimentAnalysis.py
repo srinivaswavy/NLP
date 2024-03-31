@@ -65,7 +65,7 @@ vectorizer = TfidfVectorizer(tokenizer=LemmaTokenizer())
 X_Train = vectorizer.fit_transform(inputs_train)
 X_Test = vectorizer.transform(inputs_test)
 
-model = LogisticRegression(max_iter=500)
+model = LogisticRegression(max_iter=500,class_weight='balanced')
 
 model.fit(X_Train, Y_Train)
 
@@ -81,7 +81,7 @@ for word, weight in sorted(word_weights.items(), key=lambda x: x[1])[0:30]:
     print(word, weight)
 
 confusion_matrix = metrics.confusion_matrix(Y_Test,
-                                            [1 if i > 0.6559 else -1 for i in model.predict_proba(X_Test)[:, 1]])
+                                            [1 if i > 0.80 else -1 for i in model.predict_proba(X_Test)[:, 1]])
 
 for i in range(len(inputs_test)):
     actual = Y_Test.array[i]
