@@ -1,15 +1,16 @@
 import numpy as np
-from scipy.sparse import csr_matrix
 
-# Create a sparse matrix for demonstration purposes
-data = np.array([[0, 1, 0], [2, 0, 3], [4, 0, 5],[0,0,0]])
-sparse_matrix = csr_matrix(data)
+# Let's assume the following is your numpy array
+a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-# mean of non zero elements per row
-non_zero_counts_per_row = np.diff(sparse_matrix.indptr)
+# You can divide each element of a row by the sum of elements in that row as follows:
+result = a / a.sum(axis=1,keepdims=True)
 
-sums = np.squeeze(np.asarray(sparse_matrix.sum(axis=1)))
+print(result)
 
-average_non_zero_elements_per_row = [ -1 if count==0 else sum/count for sum,count in zip(sums,non_zero_counts_per_row)]
+print(a.sum(axis=1,keepdims=True))
+print(a.sum(axis=1,keepdims=False))
 
-print(average_non_zero_elements_per_row)
+result = a / a.sum(axis=1,keepdims=False)
+
+print(result)
