@@ -47,7 +47,7 @@ r = model.fit(
     x=X_train,
     y=y_train.to_numpy(),
     batch_size=120,
-    epochs=50,
+    epochs=60,
     validation_data=(X_test, y_test.to_numpy())
 )
 
