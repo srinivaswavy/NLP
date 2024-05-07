@@ -113,16 +113,17 @@ for idx in indices[0]:
     word = tokenizer.index_word[idx]
     print(word)
 
-
-#man-king = woman-queen
+# man-king = woman-queen
 
 man = embeddings[tokenizer.word_index["man"]]
 king = embeddings[tokenizer.word_index["king"]]
 queen = embeddings[tokenizer.word_index["queen"]]
 
-distances, indices = neighbors.kneighbors(man-king+queen)
+distances, indices = neighbors.kneighbors(man - king + queen)
 
 print("Analogy test: ")
 for idx in indices[0]:
     word = tokenizer.index_word[idx]
     print(word)
+
+model.save("WordEmbeddings")
