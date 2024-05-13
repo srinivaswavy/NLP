@@ -1,42 +1,47 @@
-import random
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
 from tensorflow import keras
-from keras.layers import Dense, Input, Conv1D, Embedding, GlobalMaxPooling1D, MaxPooling1D
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+from keras.layers import Dense, Input, Embedding, Conv1D, GlobalMaxPooling1D, MaxPooling1D
 from keras.models import Model
 from keras.losses import SparseCategoricalCrossentropy
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 from keras.optimizers import Adam
 from sklearn.metrics import confusion_matrix, f1_score
 import numpy as np
-
 from matplotlib import pyplot as plt
 
-df = pd.read_csv('bbc_text_cls.csv')
-print(df.head())
-df["Y"] = df["labels"].astype("category").cat.codes
+df = pd.read_csv('/Users/csriniv6/Downloads/AirlineTweets.csv')
 
-K = df["Y"].max() + 1
+df = df[['text', 'airline_sentiment']]
+# df = df[df['airline_sentiment'] != 'neutral']
+df = df.rename(columns={'airline_sentiment': 'Y'})
+df['targets'] = df['Y'].astype("category").cat.codes
 
-print("Category count", K)
+df_train, df_test = train_test_split(df, random_state=42)
 
-print(df.head())
-df_train, df_test = train_test_split(df, random_state=123)
-tokenizer = Tokenizer(num_words=10000)
+inputs_train = df_train['text']
+inputs_test = df_test['text']
+
+targets_train = df_train['targets']
+targets_test = df_test['targets']
+
+tokenizer = Tokenizer(num_words=2000)
 tokenizer.fit_on_texts(df_train["text"])
 
 V = tokenizer.num_words
 
 X_train = pad_sequences(tokenizer.texts_to_sequences(df_train["text"]))
-Y_train = df_train["Y"]
+Y_train = df_train["targets"]
 
 T = X_train.shape[1]
 
 X_test = pad_sequences(tokenizer.texts_to_sequences(df_test["text"]), T)
-Y_test = df_test["Y"]
+Y_test = df_test["targets"]
+
+K = df['targets'].max() + 1
+
+print("K", K)
 
 print("X Test", X_test[0:2])
 
@@ -49,7 +54,7 @@ i = Input((T,))
 D = 50
 
 x = Embedding(V, D)(i)
-x = Conv1D(64, 3, activation="relu")(x)
+x = Conv1D(32, 3, activation="relu")(x)
 # x = MaxPooling1D(3)(x)
 # x = Conv1D(64, 3, activation="relu")(x)
 # x = MaxPooling1D(3)(x)
@@ -63,15 +68,15 @@ print(model.summary())
 
 model.compile(
     loss=SparseCategoricalCrossentropy(from_logits=False),
-    optimizer="adam",
+    optimizer=Adam(learning_rate=0.001),
     metrics=["accuracy"]
 )
 
 r = model.fit(
     X_train,
     Y_train,
-    batch_size=32,
-    epochs=20,
+    batch_size=4,
+    epochs=3,
     validation_data=(X_test, Y_test)
 )
 
@@ -98,18 +103,3 @@ print(cm)
 
 print("Train F1:", f1_score(Y_train, P_train, average='weighted'))
 print("Test F1:", f1_score(Y_test, P_test, average='weighted'))
-
-model.save("/Users/csriniv6/Desktop/CategoryModel")
-model.save_weights("/Users/csriniv6/Desktop/CategoryModel_weights")
-
-sample = df.sample(10)
-
-for index in range(10):
-    row = sample.iloc[index]
-    print("=================================================")
-    print("article:", row["text"])
-    print("label:", row["labels"])
-    print("Y", row["Y"])
-    predictions = model.predict(pad_sequences(tokenizer.texts_to_sequences([row["text"]]), maxlen=T))
-    print("prediction:", predictions)
-    print("predicted label:", np.argmax(predictions))

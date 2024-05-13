@@ -41,7 +41,6 @@ i = Input((D,), batch_size=120)
 x = Dense(200, activation="relu")(i)
 x = Dense(K)(x)
 
-
 model = Model(i, x)
 
 model.compile(
@@ -63,7 +62,6 @@ plt.plot(r.history['val_loss'], label='val loss')
 plt.legend()
 plt.show()
 
-
 P_train = np.apply_along_axis(np.argmax, 1, model.predict(X_train))
 P_test = np.apply_along_axis(np.argmax, 1, model.predict(X_test))
 
@@ -75,5 +73,5 @@ cm = confusion_matrix(targets_test, P_test)
 
 print(cm)
 
-print("Train F1:", f1_score(targets_train, P_train))
-print("Test F1:", f1_score(targets_test, P_test))
+print("Train F1:", f1_score(targets_train, P_train, average="weighted"))
+print("Test F1:", f1_score(targets_test, P_test, average="weighted"))
