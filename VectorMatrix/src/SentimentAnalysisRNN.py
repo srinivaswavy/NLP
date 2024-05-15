@@ -54,8 +54,8 @@ i = Input((T,))
 D = 50
 
 x = Embedding(V, D)(i)
-x = Conv1D(64, 3, activation="relu")(x)
-x = MaxPooling1D(3)(x)
+# x = Conv1D(64, 3, activation="relu")(x)
+# x = MaxPooling1D(3)(x)
 x = GRU(32)(x)
 # x = MaxPooling1D(3)(x)
 # x = Conv1D(128, 3, activation="relu")(x)
@@ -76,7 +76,7 @@ r = model.fit(
     X_train,
     Y_train,
     # batch_size=8,
-    epochs=20,
+    epochs=10,
     validation_data=(X_test, Y_test)
 )
 
