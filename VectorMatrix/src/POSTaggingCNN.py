@@ -196,10 +196,13 @@ for probs, length in zip(test_probs, test_lengths):
 flat_test_predictions = flatten(test_predictions)
 flat_test_targets = flatten(test_targets_int_unpadded)
 
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
 print("Train acc:", accuracy_score(flat_train_targets, flat_train_predictions))
 print("Test acc:", accuracy_score(flat_test_targets, flat_test_predictions))
+
+print("train confusion matrix:", confusion_matrix(flat_train_targets, flat_train_predictions))
+print("test confusion matrix:", confusion_matrix(flat_test_targets, flat_test_predictions))
 
 print("Train f1:",
       f1_score(flat_train_targets, flat_train_predictions, average='macro'))
@@ -256,6 +259,8 @@ flat_test_targets = flatten(test_targets)
 
 print("Train acc:", accuracy_score(flat_train_targets, flat_train_predictions))
 print("Test acc:", accuracy_score(flat_test_targets, flat_test_predictions))
+
+
 
 print("Train f1:",
       f1_score(flat_train_targets, flat_train_predictions, average='macro'))
