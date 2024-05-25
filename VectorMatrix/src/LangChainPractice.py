@@ -31,3 +31,18 @@
 # print(docs)
 #
 # print(docs[0].page_content[:500])
+
+
+from langchain.embeddings.openai import OpenAIEmbeddings
+
+embeddings = OpenAIEmbeddings()
+
+sentence1 = "She is a feminist."
+sentence2 = "She worked for women's rights."
+sentence3 = "This is a business document."
+
+embedding1 = embeddings.embed_query(sentence1)
+embedding2 = embeddings.embed_query(sentence2)
+embedding3 = embeddings.embed_query(sentence3)
+
+print(embedding3)
