@@ -15,19 +15,6 @@
 #
 # print(result)
 
-# import itertools
-#
-# number = ["A"] + [str(r) for r in range(2, 11)] + ["J", "Q", "K"]
-# suit = ["Clubs", "Diamonds", "Hearts", "Spades"]
-#
-# cards_tuple = list(itertools.product(number, suit))
-#
-# print(cards_tuple)
-#
-# cards = [n + " of " + s for n in number for s in suit]
-#
-# print(cards)
-
 
 class Calculator:
     def __init__(self):
